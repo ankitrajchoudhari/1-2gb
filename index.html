@@ -411,22 +411,38 @@
         }
 
         function speak() {
+             // Cancel any ongoing speech to prevent overlap
+             window.speechSynthesis.cancel();
+
              const lines = [
-                "Fatal error in DNA sequence. Sanjh Verma and Ankit Raj connected. Heart hijack complete.",
-                "Sanjh, tere bina zindagi se koi shikwa toh nahi,",
-                "Tere bina zindagi bhi lekin zindagi toh nahi.",
-                "Tum system nahi ho, meri puri duniya ho.",
-                "Ankit Raj Choudhari, sirf tumhare liye dharakta hai."
+                { text: "Fatal error in DNA sequence. Sanjh Verma and Ankit Raj connected. Heart hijack complete.", lang: "en-US", rate: 0.6, pitch: 0.1 },
+                { text: "Sanjh, tere bina zindagi se koi shikwa toh nahi,", lang: "hi-IN", rate: 0.8, pitch: 1 },
+                { text: "Tere bina zindagi bhi lekin zindagi toh nahi.", lang: "hi-IN", rate: 0.8, pitch: 1 },
+                { text: "Tum system nahi ho, meri puri duniya ho.", lang: "hi-IN", rate: 0.8, pitch: 1 },
+                { text: "Ankit Raj Choudhari, sirf tumhare liye dharakta hai.", lang: "hi-IN", rate: 0.8, pitch: 1 }
              ];
              
              let i = 0;
              const sayNext = () => {
                  if (i < lines.length) {
-                     const u = new SpeechSynthesisUtterance(lines[i]);
-                     u.lang = i === 0 ? "en-US" : "hi-IN";
-                     u.rate = 0.8;
-                     u.pitch = i === 0 ? 0.1 : 1.0;
-                     u.onend = () => { i++; sayNext(); };
+                     const u = new SpeechSynthesisUtterance(lines[i].text);
+                     u.lang = lines[i].lang;
+                     u.rate = lines[i].rate;
+                     u.pitch = lines[i].pitch;
+                     
+                     // Adding a small delay between lines for clarity
+                     u.onend = () => { 
+                         i++; 
+                         setTimeout(sayNext, 500); 
+                     };
+                     
+                     // Error handling to ensure it doesn't just stop
+                     u.onerror = (e) => {
+                         console.error("Speech Error:", e);
+                         i++;
+                         sayNext();
+                     };
+
                      window.speechSynthesis.speak(u);
                  }
              };
