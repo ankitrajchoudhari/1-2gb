@@ -231,6 +231,9 @@
     <div id="s7" class="scene">
         <img src="WhatsApp Image 2026-05-04 at 6.26.16 PM.jpeg" class="couple-pic" id="couple-pic">
         <div class="reveal-text" id="r1">BY_ANKIT_RAJ</div>
+        <div id="sharyi-text" style="color: #fff; font-size: 1.2rem; margin: 20px; text-align: center; font-style: italic; opacity: 0; transition: 2s;">
+            "Tere bina zindagi se koi shikwa toh nahi,<br>Tere bina zindagi bhi lekin zindagi toh nahi."
+        </div>
         <div class="reveal-text" id="r3" style="font-size: 7rem;">SANJH VERMA</div>
     </div>
 
@@ -365,10 +368,11 @@
                 siren.volume = 0.3;
                 document.getElementById('couple-pic').classList.add('active');
                 setTimeout(() => document.getElementById('r1').classList.add('active'), 500);
-                setTimeout(() => document.getElementById('r3').classList.add('active'), 1500);
+                setTimeout(() => document.getElementById('sharyi-text').style.opacity = '1', 2000);
+                setTimeout(() => document.getElementById('r3').classList.add('active'), 4000);
                 
                 speak();
-                await new Promise(r => setTimeout(r, 12000));
+                await new Promise(r => setTimeout(r, 15000));
 
                 // 7. INCOMING CALL (NEW)
                 go(9); // s9 is the new scene ID since s8 was WhatsApp
@@ -378,6 +382,7 @@
                 // RESET
                 document.querySelectorAll('.active').forEach(e => e.classList.remove('active'));
                 document.getElementById('couple-pic').classList.remove('active');
+                document.getElementById('sharyi-text').style.opacity = '0';
             }
         }
 
@@ -406,9 +411,26 @@
         }
 
         function speak() {
-             const u = new SpeechSynthesisUtterance("Fatal error in DNA sequence. Sanjh Verma and Ankit Raj connected. Heart hijack complete.");
-             u.lang = "en-US"; u.rate = 0.5; u.pitch = 0.1;
-             window.speechSynthesis.speak(u);
+             const lines = [
+                "Fatal error in DNA sequence. Sanjh Verma and Ankit Raj connected. Heart hijack complete.",
+                "Sanjh, tere bina zindagi se koi shikwa toh nahi,",
+                "Tere bina zindagi bhi lekin zindagi toh nahi.",
+                "Tum system nahi ho, meri puri duniya ho.",
+                "Ankit Raj Choudhari, sirf tumhare liye dharakta hai."
+             ];
+             
+             let i = 0;
+             const sayNext = () => {
+                 if (i < lines.length) {
+                     const u = new SpeechSynthesisUtterance(lines[i]);
+                     u.lang = i === 0 ? "en-US" : "hi-IN";
+                     u.rate = 0.8;
+                     u.pitch = i === 0 ? 0.1 : 1.0;
+                     u.onend = () => { i++; sayNext(); };
+                     window.speechSynthesis.speak(u);
+                 }
+             };
+             sayNext();
         }
     </script>
 </body>
