@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>S.Y.S.T.E.M_F.A.T.A.L</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+        :root {
+            --neon-blue: #00d2ff;
+            --danger-red: #ff0000;
+            --cyber-yellow: #f0ff00;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; cursor: crosshair; }
+        body, html {
+            background: #000;
+            color: var(--danger-red);
+            font-family: 'Share Tech Mono', monospace;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- CYBER OVERLAYS --- */
+        .glitch-overlay {
+            display: none !important;
+        }
+
+        #master-alert {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 997; pointer-events: none; opacity: 0;
+        }
+
+        .huge-red-alert {
+            animation: nightmarePulse 0.15s infinite alternate;
+            opacity: 0.2 !important;
+        }
+        
+        @keyframes nightmarePulse {
+            0% { background: rgba(0, 0, 0, 1); filter: hue-rotate(0deg); }
+            100% { background: rgba(150, 0, 0, 0.9); filter: hue-rotate(10deg); }
+        }
+
+        .extreme-shake { animation: bruteShake 0.05s infinite; }
+        @keyframes bruteShake {
+            0% { transform: translate(15px, -15px); }
+            50% { transform: translate(-15px, 15px) rotate(1deg); }
+            100% { transform: translate(15px, 15px); }
+        }
+
+        .scene {
+            position:fixed; top:0; left:0; width:100%; height:100%;
+            display:none; flex-direction:column; justify-content:center;
+            align-items:center; padding:20px; z-index:10;
+        }
+
+        /* --- DNA ANALYZER --- */
+        #dna-container {
+            width: 300px; height: 400px; border: 1px solid var(--neon-blue);
+            position: relative; overflow: hidden; background: rgba(0, 210, 255, 0.05);
+        }
+        .dna-bar {
+            width: 100%; height: 4px; background: var(--neon-blue);
+            position: absolute; animation: dnaScan 2s linear infinite;
+            box-shadow: 0 0 20px var(--neon-blue);
+        }
+        @keyframes dnaScan { 0% { top: 0; } 100% { top: 100%; } }
+
+        /* --- ❤️ NEON HEART --- */
+        .heart-loop-container {
+            position: relative; width: 350px; height: 350px;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .heart-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 20px var(--neon-blue)); }
+        .heart-path {
+            fill: none; stroke: var(--neon-blue); stroke-width: 2;
+            stroke-dasharray: 1000; stroke-dashoffset: 1000;
+            animation: drawHeart 4s ease-in-out infinite;
+        }
+        @keyframes drawHeart {
+            0% { stroke-dashoffset: 1000; opacity: 0; }
+            50% { stroke-dashoffset: 0; opacity: 1; }
+            100% { stroke-dashoffset: -1000; opacity: 0; }
+        }
+
+        /* --- BUTTONS --- */
+        .emergency-btn {
+            border: 5px solid var(--danger-red); padding: 20px 60px;
+            background: #000; color: var(--danger-red);
+            font-size: 2rem; letter-spacing: 10px; text-transform: uppercase;
+            box-shadow: 0 0 150px red; cursor: pointer;
+            font-weight: 900; animation: blink 0.1s infinite;
+        }
+
+        /* --- VIDEO HUD --- */
+        .cctv-container { 
+            position: relative; width: 98%; max-width: 900px; 
+            border: 4px solid var(--danger-red);
+            background: black;
+        }
+        .cctv-video { 
+            width: 100%; 
+            filter: none !important; 
+            opacity: 1 !important;
+            display: block;
+        }
+        .hud-overlay {
+            display: none !important;
+        }
+
+        /* --- REVEAL --- */
+        .couple-pic { 
+            width: 100%; height: 100%; object-fit: contain;
+            border: none; 
+            filter: none !important;
+            opacity: 0; 
+            transition: 0.5s ease-in;
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
+        .reveal-text { 
+            opacity: 0; transform: scale(5); transition: 2s cubic-bezier(0.1, 0.7, 1.0, 0.1);
+            font-size: 5rem; margin: 10px; font-weight: 900; text-align: center;
+            color: white; text-shadow: 0 0 50px red;
+        }
+        /* --- NEW: IMAGE GLITCH --- */
+        .whatsapp-img {
+            width: 280px; height: 380px; object-fit: cover;
+            border: 2px solid white;
+            filter: none !important;
+            position: absolute; opacity: 0;
+            transition: 0.5s;
+        }
+        .active { opacity: 1 !important; transform: scale(1) translateY(0) !important; }
+
+        @media (max-width: 600px) {
+            #intro-typing { font-size: 1.8rem !important; }
+            .reveal-text { font-size: 2.5rem !important; }
+            .emergency-btn { font-size: 1.2rem; padding: 15px 30px; letter-spacing: 5px; }
+            .whatsapp-img { width: 45%; height: auto; }
+            .calling-screen { width: 90% !important; height: auto !important; padding: 30px !important; }
+            .caller-name { font-size: 2rem !important; }
+            #manual-input { width: 90% !important; font-size: 1.2rem !important; }
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+    </style>
+</head>
+<body onclick="kickstart()">
+    <div class="glitch-overlay"></div>
+    <div id="master-alert"></div>
+
+    <audio id="siren-audio" loop preload="auto">
+        <source src="siren_real.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Scene 0: Landing -->
+    <div id="s0" class="scene" style="display: flex; background: #000; flex-direction: column; justify-content: center; align-items: center;">
+        <div id="intro-typing" style="font-size: 3rem; color: #fff; text-shadow: 0 0 20px #fff; margin-bottom: 40px; min-height: 4rem;"></div>
+        <div id="input-lock" style="display: none; text-align: center;">
+            <p id="instruction-text" style="color: var(--danger-red); margin-bottom: 20px; font-size: 1.2rem; letter-spacing: 2px;">[ INITIALIZING... ]</p>
+            <input type="text" id="manual-input" autocomplete="off" 
+                style="background: transparent; border: 2px solid var(--danger-red); color: #fff; font-family: inherit; font-size: 2rem; padding: 15px; width: 400px; text-align: center; outline: none; box-shadow: 0 0 20px rgba(255,0,0,0.3);">
+            <p id="sub-instruction" style="color: #666; margin-top: 15px;">WAITING FOR INPUT...</p>
+        </div>
+        <button id="override-btn" class="emergency-btn" style="display: none; margin-top: 20px;" onclick="kickstart()">OVERRIDE</button>
+    </div>
+
+    <!-- Scene 1: Chaos Terminal -->
+    <div id="s1" class="scene">
+        <div id="term-out" style="width: 100%; height: 100%; font-size: 2rem; overflow: hidden; color: #ff0000; font-weight: bold;"></div>
+    </div>
+
+    <!-- NEW Scene 5: DNA Analysis -->
+    <div id="s5" class="scene">
+        <h1 style="color:var(--neon-blue); margin-bottom: 20px; letter-spacing: 10px;">DNA_SEQUENCING...</h1>
+        <div id="dna-container">
+            <div class="dna-bar"></div>
+            <div style="padding: 20px; font-size: 1.2rem; color: var(--neon-blue);">
+                [MATCH] SANJH_VERMA: 99.9%<br>
+                [MATCH] ANKIT_RAJ: 100%<br>
+                [STATUS] SOUL_BOND_DETECTED<br>
+                [STATUS] NO_REVERSAL_POSSIBLE<br>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scene 3: CCTV Hijack -->
+    <div id="s3" class="scene">
+        <div class="cctv-container">
+            <video id="cctv-vid" class="cctv-video" muted loop>
+                <source src="Screen Recording 2026-05-04 185538.mp4" type="video/mp4">
+            </video>
+            <div class="hud-overlay"></div>
+            <!-- RED BULB FLASH -->
+            <div style="position:absolute; top:20px; right:20px; width:40px; height:40px; background:red; border-radius:50%; box-shadow:0 0 40px red; animation: blink 0.3s infinite;"></div>
+            <div style="position:absolute; bottom:20px; right:20px; color:red; font-size:3rem;">REC ●</div>
+        </div>
+    </div>
+    <!-- NEW Scene 8: WhatsApp Hijack -->
+    <div id="s8" class="scene">
+        <h1 style="color:var(--danger-red); margin-bottom: 30px;">DATABASE_LEAK: WHATSAPP_STORAGE</h1>
+        <div style="position:relative; width:600px; height:400px; display:flex; justify-content:center; align-items:center;">
+            <img src="WhatsApp Image 2026-05-04 at 6.26.15 PM.jpeg" class="whatsapp-img" id="wa1" style="left:0; transform:rotate(-5deg);">
+            <img src="WhatsApp Image 2026-05-04 at 6.26.15 PM (1).jpeg" class="whatsapp-img" id="wa2" style="right:0; transform:rotate(5deg);">
+        </div>
+    </div>
+
+    <!-- Scene 4: Radar Location -->
+    <div id="s4" class="scene">
+        <div style="border: 4px solid red; padding: 40px; text-align: center; background: rgba(255,0,0,0.1);">
+            <h1 style="color:red; font-size: 4rem; animation: blink 0.2s infinite;">TARGET_LOCKED</h1>
+            <canvas id="radar" width="300" height="300" style="margin-top: 20px;"></canvas>
+            <div style="font-size: 2rem; margin-top: 20px; color: white;">DISTANCE: 0.00 KM</div>
+        </div>
+    </div>
+
+    <!-- Scene 2: Heart -->
+    <div id="s2" class="scene">
+        <div class="heart-loop-container">
+            <svg class="heart-svg" viewBox="0 0 100 100">
+                <path class="heart-path" d="M50,30 C35,10 10,25 10,50 C10,75 50,95 50,95 C50,95 90,75 90,50 C90,25 65,10 50,30 Z"></path>
+            </svg>
+        </div>
+        <h2 style="color: var(--neon-blue); font-size: 4rem; text-shadow: 0 0 30px var(--neon-blue);">HEART_DLL: HIJACKED</h2>
+    </div>
+
+    <!-- Scene 7: Reveal -->
+    <div id="s7" class="scene">
+        <img src="WhatsApp Image 2026-05-04 at 6.26.16 PM.jpeg" class="couple-pic" id="couple-pic">
+        <div class="reveal-text" id="r1">BY_ANKIT_RAJ</div>
+        <div class="reveal-text" id="r3" style="font-size: 7rem;">SANJH VERMA</div>
+    </div>
+
+    <!-- Scene 9: Incoming Call -->
+    <div id="s9" class="scene">
+        <div class="calling-screen" style="background: #111; border: 2px solid var(--neon-blue); padding: 50px; border-radius: 20px; text-align: center; width: 400px;">
+            <div class="caller-id">
+                <div style="font-size: 1rem; color: #888; text-transform: uppercase; margin-bottom: 20px;">Incoming Call...</div>
+                <div class="caller-name" style="font-size: 3rem; color: #fff; margin-bottom: 10px;">ANKIT RAJ</div>
+                <div class="caller-number" style="font-size: 1.5rem; color: #aaa; margin-bottom: 40px;">9363793714</div>
+            </div>
+            <div class="call-actions" style="display: flex; justify-content: space-around; margin-bottom: 30px;">
+                <div class="call-btn decline" style="width: 70px; height: 70px; background: #ff3131; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white;">✖</div>
+                <div class="call-btn accept" style="width: 70px; height: 70px; background: #00ff41; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; animation: pulse-green 1s infinite;">✔</div>
+            </div>
+            <style>
+                @keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(0, 255, 65, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 255, 65, 0); } }
+            </style>
+            <div style="font-size: 1.2rem; color: var(--danger-red); font-weight: bold; animation: blink 0.5s infinite;">ALERT: URGENT_CONNECTION_REQUEST</div>
+        </div>
+    </div>
+
+    <script>
+        let running = false;
+        let phase = 1;
+        const siren = document.getElementById('siren-audio');
+        const alertBox = document.getElementById('master-alert');
+        const term = document.getElementById('term-out');
+        const vid = document.getElementById('cctv-vid');
+
+        window.onload = function() {
+            typeIntro();
+        };
+
+        async function typeIntro() {
+            const intro = document.getElementById('intro-typing');
+            const lock = document.getElementById('input-lock');
+            const input = document.getElementById('manual-input');
+            const instruction = document.getElementById('instruction-text');
+            const subtext = document.getElementById('sub-instruction');
+            
+            const txt = "SYSTEM ACCESS REQUIRED";
+            for(let c of txt) {
+                intro.innerHTML += c;
+                await new Promise(r => setTimeout(r, 100));
+            }
+            await new Promise(r => setTimeout(r, 1000));
+            
+            // Start Phase 2 directly: Ankit's Number
+            phase = 2;
+            input.value = "";
+            instruction.innerText = "[ ACCESS RESTRICTED ]";
+            instruction.style.color = "var(--neon-blue)";
+            subtext.innerText = "ENTER ANKIT'S PHONE NUMBER TO UNLOCK";
+            input.placeholder = "ENTER 10-DIGIT NUMBER";
+            input.style.borderColor = "var(--neon-blue)";
+            lock.style.display = 'block';
+            input.focus();
+
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const val = input.value.toUpperCase().trim();
+                    if (val === "9363793714") {
+                        lock.style.display = 'none';
+                        document.getElementById('override-btn').style.display = 'block';
+                    } else {
+                        errorMsg(input, "IDENTIFICATION FAILED");
+                    }
+                }
+            });
+        }
+
+        function errorMsg(el, msg) {
+            el.value = "";
+            el.placeholder = msg;
+            el.style.borderColor = "yellow";
+            setTimeout(() => {
+                el.placeholder = "";
+                el.style.borderColor = phase === 1 ? "var(--danger-red)" : "var(--neon-blue)";
+            }, 1000);
+        }
+
+        function kickstart() {
+            if(running) return;
+            running = true;
+            document.getElementById('s0').style.display = 'none';
+            siren.play();
+            startLoop();
+        }
+
+        async function startLoop() {
+            while(true) {
+                // 1. TERMINAL CHAOS
+                document.body.classList.add('extreme-shake');
+                alertBox.classList.add('huge-red-alert');
+                siren.volume = 1.0;
+                go(1); term.innerHTML = "";
+                for(let i=0; i<50; i++) {
+                    term.innerHTML += `CRITICAL_ERROR: DATA_ENCRYPTION_BYPASSED_0x${Math.random().toString(16).substr(2,4).toUpperCase()}<br>`;
+                    await new Promise(r => setTimeout(r, 30));
+                }
+
+                // 2. DNA SCAN (NEW)
+                go(5);
+                await new Promise(r => setTimeout(r, 4000));
+
+                // 3. CCTV VIDEO
+                go(3);
+                vid.play();
+                await new Promise(r => setTimeout(r, 7000));
+                vid.pause();
+
+                // 3b. WHATSAPP LEAK
+                go(8);
+                setTimeout(() => document.getElementById('wa1').classList.add('active'), 500);
+                setTimeout(() => document.getElementById('wa2').classList.add('active'), 1500);
+                await new Promise(r => setTimeout(r, 4000));
+
+                // 4. RADAR
+                go(4);
+                drawRadar();
+                await new Promise(r => setTimeout(r, 4000));
+
+                // 5. HEART
+                document.body.classList.remove('extreme-shake');
+                alertBox.classList.remove('huge-red-alert');
+                go(2);
+                await new Promise(r => setTimeout(r, 5000));
+
+                // 6. REVEAL
+                go(7);
+                siren.volume = 0.3;
+                document.getElementById('couple-pic').classList.add('active');
+                setTimeout(() => document.getElementById('r1').classList.add('active'), 500);
+                setTimeout(() => document.getElementById('r3').classList.add('active'), 1500);
+                
+                speak();
+                await new Promise(r => setTimeout(r, 12000));
+
+                // 7. INCOMING CALL (NEW)
+                go(9); // s9 is the new scene ID since s8 was WhatsApp
+                siren.volume = 0.2;
+                await new Promise(r => setTimeout(r, 8000));
+
+                // RESET
+                document.querySelectorAll('.active').forEach(e => e.classList.remove('active'));
+                document.getElementById('couple-pic').classList.remove('active');
+            }
+        }
+
+        function go(i) {
+            document.querySelectorAll('.scene').forEach(s => s.style.display = 'none');
+            const target = document.getElementById(`s${i}`);
+            if(target) target.style.display = 'flex';
+        }
+
+        function drawRadar() {
+            const canvas = document.getElementById('radar');
+            const ctx = canvas.getContext('2d');
+            let angle = 0;
+            const draw = () => {
+                ctx.clearRect(0, 0, 300, 300);
+                ctx.strokeStyle = 'red'; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.arc(150, 150, 120, 0, Math.PI*2); ctx.stroke();
+                ctx.beginPath(); ctx.arc(150, 150, 80, 0, Math.PI*2); ctx.stroke();
+                ctx.moveTo(150, 150);
+                ctx.lineTo(150 + Math.cos(angle)*120, 150 + Math.sin(angle)*120);
+                ctx.stroke();
+                angle += 0.15;
+                if(document.getElementById('s4').style.display === 'flex') requestAnimationFrame(draw);
+            };
+            draw();
+        }
+
+        function speak() {
+             const u = new SpeechSynthesisUtterance("Fatal error in DNA sequence. Sanjh Verma and Ankit Raj connected. Heart hijack complete.");
+             u.lang = "en-US"; u.rate = 0.5; u.pitch = 0.1;
+             window.speechSynthesis.speak(u);
+        }
+    </script>
+</body>
+</html>
